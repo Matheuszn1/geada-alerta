@@ -23,8 +23,8 @@ Thumbs.db
 !.vscode/extensions.json
 .idea/
 
-# Configurações locais do Claude Code (permissões desta máquina)
-.claude/settings.local.json
+# Configurações locais do Claude Code (permissões e preview desta máquina)
+.claude/
 
 # Skills de agentes de IA criadas automaticamente pelo `prisma init`
 backend/.claude/

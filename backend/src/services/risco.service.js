@@ -43,9 +43,10 @@ export function calcularRisco({ temperaturaMin, temperaturaCritica, velocidadeVe
   };
 }
 
-export function montarMensagem({ cultura, propriedade, temperaturaMin, nivel, radiativa, data }) {
+export function montarMensagem({ cultura, propriedade, temperaturaMin, nivel, radiativa, data, tipo = 'PREVISTA' }) {
   const dia = data.toLocaleDateString('pt-BR', { weekday: 'long', day: '2-digit', month: '2-digit', timeZone: 'America/Sao_Paulo' });
   const hora = data.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', timeZone: 'America/Sao_Paulo' });
+  const origem = tipo === 'OBSERVADA' ? 'registrada no termômetro' : 'prevista';
   const extra = radiativa ? ' Céu limpo e vento calmo favorecem geada de radiação.' : '';
-  return `Risco ${nivel} para ${cultura} em ${propriedade}: mínima de ${temperaturaMin.toFixed(1)} °C prevista para ${dia} às ${hora}.${extra}`;
+  return `Risco ${nivel} para ${cultura} em ${propriedade}: mínima de ${temperaturaMin.toFixed(1)} °C ${origem} para ${dia} às ${hora}.${extra}`;
 }

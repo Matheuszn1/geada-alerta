@@ -56,6 +56,7 @@ export async function gerarAlertas(propriedadeId) {
           nivel: risco.nivel,
           radiativa: risco.radiativa,
           data: minima.dataHora,
+          tipo: minima.tipo,
         }),
       };
       gerados.push({ plantioId: plantio.id, ...dados });
