@@ -1,0 +1,108 @@
+// Schema do GeadaAlerta
+// Documentação: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum FonteLeitura {
+  MANUAL
+  OPEN_METEO
+}
+
+enum TipoLeitura {
+  OBSERVADA
+  PREVISTA
+}
+
+enum NivelRisco {
+  BAIXO
+  MODERADO
+  ALTO
+  CRITICO
+}
+
+model Produtor {
+  id           Int           @id @default(autoincrement())
+  nome         String
+  email        String        @unique
+  telefone     String?
+  criadoEm     DateTime      @default(now())
+  propriedades Propriedade[]
+}
+
+model Propriedade {
+  id         Int            @id @default(autoincrement())
+  nome       String
+  municipio  String
+  latitude   Float
+  longitude  Float
+  altitude   Int?
+  produtorId Int
+  produtor   Produtor       @relation(fields: [produtorId], references: [id], onDelete: Cascade)
+  plantios   Plantio[]
+  leituras   LeituraClima[]
+  criadoEm   DateTime       @default(now())
+
+  @@index([produtorId])
+}
+
+// Catálogo de culturas com a temperatura a partir da qual há dano por geada
+model Cultura {
+  id                 Int       @id @default(autoincrement())
+  nome               String    @unique
+  temperaturaCritica Float // °C — abaixo disso o estágio sensível sofre dano
+  estagioSensivel    String // ex.: "floração", "brotação"
+  descricao          String?
+  plantios           Plantio[]
+}
+
+// Uma cultura plantada em uma propriedade (tabela associativa N:N com dados próprios)
+model Plantio {
+  id            Int         @id @default(autoincrement())
+  areaHectares  Float
+  dataPlantio   DateTime?
+  propriedadeId Int
+  culturaId     Int
+  propriedade   Propriedade @relation(fields: [propriedadeId], references: [id], onDelete: Cascade)
+  cultura       Cultura     @relation(fields: [culturaId], references: [id])
+  alertas       Alerta[]
+
+  @@unique([propriedadeId, culturaId])
+}
+
+model LeituraClima {
+  id              Int          @id @default(autoincrement())
+  dataHora        DateTime
+  temperatura     Float // °C a 2 m do solo
+  umidade         Float? // %
+  velocidadeVento Float? // km/h
+  coberturaNuvens Float? // %
+  fonte           FonteLeitura @default(MANUAL)
+  tipo            TipoLeitura  @default(OBSERVADA)
+  propriedadeId   Int
+  propriedade     Propriedade  @relation(fields: [propriedadeId], references: [id], onDelete: Cascade)
+
+  @@unique([propriedadeId, dataHora, tipo])
+  @@index([propriedadeId, dataHora])
+}
+
+model Alerta {
+  id             Int        @id @default(autoincrement())
+  dataReferencia DateTime // dia/hora da mínima prevista
+  temperaturaMin Float
+  nivel          NivelRisco
+  mensagem       String
+  lido           Boolean    @default(false)
+  plantioId      Int
+  plantio        Plantio    @relation(fields: [plantioId], references: [id], onDelete: Cascade)
+  criadoEm       DateTime   @default(now())
+
+  @@unique([plantioId, dataReferencia])
+  @@index([nivel, lido])
+}

@@ -1,0 +1,33 @@
+# Dependências
+node_modules/
+
+# Variáveis de ambiente (segredos locais)
+.env
+.env.*
+!.env.example
+
+# Prisma Client gerado (recriado com `npm run prisma:generate`)
+backend/src/generated/
+
+# Build do frontend
+frontend/dist/
+
+# Logs e sistema
+*.log
+npm-debug.log*
+.DS_Store
+Thumbs.db
+
+# Editores
+.vscode/*
+!.vscode/extensions.json
+.idea/
+
+# Configurações locais do Claude Code (permissões desta máquina)
+.claude/settings.local.json
+
+# Skills de agentes de IA criadas automaticamente pelo `prisma init`
+backend/.claude/
+backend/.windsurf/
+backend/.agents/
+backend/skills-lock.json

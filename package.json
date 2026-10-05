@@ -1,0 +1,22 @@
+{
+  "name": "geada-alerta",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Monitoramento de risco de geada para produtores da Serra Catarinense",
+  "engines": {
+    "node": ">=22 <25"
+  },
+  "scripts": {
+    "setup": "npm install && npm install --prefix backend && npm install --prefix frontend",
+    "db:up": "docker compose up -d --wait",
+    "db:down": "docker compose down",
+    "db:migrate": "npm run prisma:migrate --prefix backend",
+    "db:seed": "npm run prisma:seed --prefix backend",
+    "db:studio": "npm run prisma:studio --prefix backend",
+    "dev": "concurrently -n api,web -c blue,green \"npm run dev --prefix backend\" \"npm run dev --prefix frontend\"",
+    "test": "npm test --prefix backend"
+  },
+  "devDependencies": {
+    "concurrently": "^10.0.5"
+  }
+}
