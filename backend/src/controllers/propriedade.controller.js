@@ -1,12 +1,10 @@
 import { prisma } from '../lib/prisma.js';
-import { gerarAlertas } from '../services/alerta.service.js';
+import { filtroAlertaAtual, gerarAlertas } from '../services/alerta.service.js';
 import { sincronizarPrevisao } from '../services/clima.service.js';
 import { NIVEIS } from '../services/risco.service.js';
 import { idParam, leituraManualSchema, propriedadeSchema } from '../validators/schemas.js';
 
-const DOZE_HORAS = 12 * 60 * 60 * 1000;
-
-// Maior nível entre os alertas ainda relevantes (das últimas 12 h em diante) da propriedade.
+// Maior nível entre os alertas atuais da propriedade.
 function riscoAtual(propriedade) {
   const niveis = propriedade.plantios.flatMap((p) => p.alertas.map((a) => NIVEIS.indexOf(a.nivel)));
   return niveis.length ? NIVEIS[Math.max(...niveis)] : 'BAIXO';
@@ -18,7 +16,7 @@ function incluirAlertasRecentes() {
     plantios: {
       include: {
         cultura: true,
-        alertas: { where: { dataReferencia: { gte: new Date(Date.now() - DOZE_HORAS) } }, orderBy: { dataReferencia: 'asc' } },
+        alertas: { where: filtroAlertaAtual(), orderBy: { dataReferencia: 'asc' } },
       },
     },
   };

@@ -5,7 +5,9 @@ import { MapaPropriedades } from '../components/MapaPropriedades.jsx'
 import { NivelBadge } from '../components/NivelBadge.jsx'
 import { useApi } from '../hooks/useApi.js'
 import { api } from '../services/api.js'
-import { NIVEIS, ROTULO_NIVEL, graus, dataHora } from '../utils/formato.js'
+import { graus, dataHora } from '../utils/formato.js'
+
+const CARTAO_NIVEL = { CRITICO: 'alertas críticos', ALTO: 'alertas de risco alto', MODERADO: 'alertas moderados' }
 
 export function Painel() {
   const resumo = useApi('/dashboard')
@@ -52,12 +54,19 @@ export function Painel() {
       {erroAtualizacao && <Erro mensagem={erroAtualizacao} />}
 
       <section className="cards-nivel">
-        {[...NIVEIS].reverse().map((nivel) => (
+        {['CRITICO', 'ALTO', 'MODERADO'].map((nivel) => (
           <div key={nivel} className={`card-nivel card-${nivel.toLowerCase()}`}>
             <span className="numero">{r.alertasPorNivel[nivel]}</span>
-            <span>alertas {ROTULO_NIVEL[nivel].toLowerCase()}</span>
+            <span>{CARTAO_NIVEL[nivel]}</span>
           </div>
         ))}
+        {/* Risco BAIXO não gera alerta: o 4º cartão mostra quantas propriedades estão tranquilas */}
+        <div className="card-nivel card-baixo">
+          <span className="numero">
+            {r.propriedadesSemRisco}/{r.propriedades}
+          </span>
+          <span>propriedades sem risco</span>
+        </div>
       </section>
 
       <div className="grade-2">

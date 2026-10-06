@@ -1,4 +1,5 @@
 import { prisma } from '../lib/prisma.js';
+import { filtroAlertaAtual } from '../services/alerta.service.js';
 import { NIVEIS } from '../services/risco.service.js';
 import { filtroAlertasSchema, idParam } from '../validators/schemas.js';
 
@@ -11,12 +12,18 @@ const incluir = {
   },
 };
 
-// GET /alertas?nivel=ALTO&lido=false&propriedadeId=1
+// GET /alertas?nivel=ALTO&lido=false&propriedadeId=1&periodo=todos
+// Por padrão só os alertas atuais (mesma regra do painel); periodo=todos inclui o histórico.
 export async function listar(req, res, next) {
   try {
-    const { nivel, lido, propriedadeId } = filtroAlertasSchema.parse(req.query);
+    const { nivel, lido, propriedadeId, periodo } = filtroAlertasSchema.parse(req.query);
     const alertas = await prisma.alerta.findMany({
-      where: { nivel, lido, plantio: propriedadeId ? { propriedadeId } : undefined },
+      where: {
+        ...(periodo === 'atuais' ? filtroAlertaAtual() : {}),
+        nivel,
+        lido,
+        plantio: propriedadeId ? { propriedadeId } : undefined,
+      },
       include: incluir,
       orderBy: [{ dataReferencia: 'asc' }],
     });

@@ -44,4 +44,5 @@ export const filtroAlertasSchema = z.object({
   nivel: z.enum(['BAIXO', 'MODERADO', 'ALTO', 'CRITICO']).optional(),
   lido: z.enum(['true', 'false']).transform((v) => v === 'true').optional(),
   propriedadeId: idParam.optional(),
+  periodo: z.enum(['atuais', 'todos']).default('atuais'),
 });

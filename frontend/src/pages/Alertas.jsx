@@ -9,7 +9,8 @@ import { NIVEIS, ROTULO_NIVEL } from '../utils/formato.js'
 export function Alertas() {
   const [nivel, setNivel] = useState('')
   const [lido, setLido] = useState('false')
-  const filtros = new URLSearchParams(Object.entries({ nivel, lido }).filter(([, v]) => v))
+  const [periodo, setPeriodo] = useState('atuais')
+  const filtros = new URLSearchParams(Object.entries({ nivel, lido, periodo }).filter(([, v]) => v))
   const { dados, carregando, erro, recarregar } = useApi(`/alertas?${filtros}`)
   const [erroAcao, setErroAcao] = useState(null)
 
@@ -27,9 +28,14 @@ export function Alertas() {
       <header className="cabecalho">
         <h1>Alertas de geada</h1>
         <div className="filtros">
+          <select value={periodo} onChange={(e) => setPeriodo(e.target.value)} aria-label="Filtrar por período">
+            <option value="atuais">Próximos dias</option>
+            <option value="todos">Histórico completo</option>
+          </select>
           <select value={nivel} onChange={(e) => setNivel(e.target.value)} aria-label="Filtrar por nível">
             <option value="">Todos os níveis</option>
-            {NIVEIS.map((n) => (
+            {/* BAIXO não gera alerta, então não entra no filtro */}
+            {NIVEIS.filter((n) => n !== 'BAIXO').map((n) => (
               <option key={n} value={n}>
                 {ROTULO_NIVEL[n]}
               </option>
