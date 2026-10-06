@@ -36,7 +36,11 @@ export function GraficoTemperatura({ leituras, culturas }) {
           minTickGap={40}
         />
         <YAxis domain={[min, max]} unit="°" tick={{ fontSize: 12 }} />
-        <Tooltip labelFormatter={(t) => dataHora(t)} formatter={(v, nome) => [`${v.toFixed(1)} °C`, nome]} />
+        <Tooltip
+          labelFormatter={(t) => dataHora(t)}
+          formatter={(v, nome) => [v == null ? '—' : `${v.toFixed(1)} °C`, nome]}
+          contentStyle={{ background: 'var(--superficie)', border: '1px solid var(--borda)', color: 'var(--texto)' }}
+        />
         <Legend />
         <ReferenceLine y={0} stroke="#94a3b8" />
         {culturas.map((c) => (
@@ -49,7 +53,15 @@ export function GraficoTemperatura({ leituras, culturas }) {
           />
         ))}
         <Line type="monotone" dataKey="prevista" name="Prevista (Open-Meteo)" stroke="#2563eb" dot={false} strokeWidth={2} connectNulls />
-        <Line dataKey="observada" name="Observada (manual)" stroke="#0f172a" strokeWidth={0} dot={{ r: 5, fill: '#0f172a' }} isAnimationActive={false} />
+        {/* Cor do tema (var(--texto)): uma cor fixa escura sumia no modo escuro */}
+        <Line
+          dataKey="observada"
+          name="Observada (termômetro)"
+          stroke="var(--texto)"
+          strokeWidth={0}
+          dot={{ r: 6, fill: 'var(--texto)', stroke: 'var(--superficie)', strokeWidth: 2 }}
+          isAnimationActive={false}
+        />
       </LineChart>
     </ResponsiveContainer>
   )
