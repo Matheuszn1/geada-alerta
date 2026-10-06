@@ -103,7 +103,7 @@ erDiagram
 | GET/PUT/DELETE | `/api/culturas/:id` | Detalhe / atualiza / remove |
 | GET/POST | `/api/plantios` (`?propriedadeId=`) | Lista / cria |
 | GET/PUT/DELETE | `/api/plantios/:id` | Detalhe / atualiza / remove |
-| GET | `/api/alertas` (`?nivel=&lido=&propriedadeId=`) | Lista ordenada por gravidade |
+| GET | `/api/alertas` (`?nivel=&lido=&propriedadeId=&periodo=atuais\|todos`) | Lista ordenada por gravidade (padrão: só os atuais) |
 | PATCH | `/api/alertas/:id/lido` | Marca como lido |
 | DELETE | `/api/alertas/:id` | Remove |
 

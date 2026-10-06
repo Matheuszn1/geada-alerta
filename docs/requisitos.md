@@ -57,7 +57,9 @@ busca a previsão horária na API pública **Open-Meteo**, cruza a temperatura m
 - **RN02 — Geada de radiação:** com vento < 7 km/h **e** nuvens < 30 %, o nível sobe um degrau (no máximo até
   CRÍTICO), pois a superfície das plantas fica de 2 a 4 °C mais fria que o ar medido a 2 m.
 - **RN03:** O risco de cada noite é definido pela **menor temperatura do dia** (fuso America/Sao_Paulo).
-- **RN04:** Ao atualizar a previsão, alertas futuros **não lidos** são recalculados; os **lidos** são preservados.
+- **RN04:** Ao atualizar a previsão, alertas atuais **não lidos** são recalculados; os **lidos** são preservados.
+- **RN07 — Alerta atual:** um alerta é considerado atual até 12 h depois do horário da mínima (cobre a madrugada
+  que acabou de passar). Painel, mapa, lista e geração de alertas usam essa mesma regra; o restante fica no histórico.
 - **RN05:** Uma cultura em uso em algum plantio não pode ser excluída (resposta 409).
 - **RN06:** Excluir um produtor ou uma propriedade exclui em cascata as propriedades, os plantios, as leituras e os alertas.
 
