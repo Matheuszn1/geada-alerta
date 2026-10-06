@@ -40,6 +40,7 @@ Um trecho de código gerado pela IA só foi aceito quando:
 | **Bug: API subindo na porta do frontend** | "voltei" (retomada dos testes no navegador) | O painel mostrava "Erro 502". O log revelou `API rodando em http://localhost:5173`: o ambiente que sobe os servidores define a variável genérica `PORT=5173`, e o backend também lia `PORT`. A variável foi trocada por `API_PORT`. Além disso, a tela exibia só "Erro 502", e o cliente HTTP passou a traduzir 502/503/504 para "Não foi possível conectar ao servidor". | Variável de ambiente com nome próprio do projeto evita colisão com ferramentas e plataformas que definem `PORT`. Mensagens de erro precisam fazer sentido para o usuário. |
 | **Bug: painel dizia 0 alertas e a lista mostrava 4** | Mesmo prompt. | Três consultas usavam regras de tempo diferentes: o painel contava alertas das últimas 12 h, a lista não filtrava e a geração usava "desde a meia-noite". A regra foi centralizada em `filtroAlertaAtual()` no `alerta.service.js` e usada em todos os pontos. A lista ganhou o filtro "Próximos dias / Histórico". O cartão "alertas baixo" (sempre 0, porque BAIXO não gera alerta) virou "propriedades sem risco". | **Uma regra de negócio, um lugar no código.** A duplicação da constante foi a causa do bug. |
 | **Bug: leitura manual invisível no gráfico** | Mesmo prompt. | O ponto observado usava a cor fixa `#0f172a` (quase preta), que some no **modo escuro**. Passou a usar a variável de tema `var(--texto)`, e o tooltip foi protegido contra valores nulos. | Cores sempre via variáveis de tema, nunca fixas, para funcionar nos dois temas. |
+| **GitHub, Kanban e roteiro da apresentação** | "onde realizo login?" (login do GitHub CLI feito pelo grupo no navegador) | O terminal do app não carregou, então o login rodou em segundo plano com código de dispositivo. Ao criar as issues, o PowerShell 5.1 corrompia argumentos com aspas duplas; as aspas foram trocadas por aspas tipográficas. A automação do GitHub Projects fechou sozinha as issues movidas para "Done". | O repositório é **público** (sem segredos versionados). Requisitos viraram issues ligadas aos commits. Como geada em novembro é improvável, foi criado o `npm run db:demo` (frente fria simulada, **sem depender de internet**) para a demonstração ao vivo não ficar refém do clima nem do Wi-Fi. |
 | **Documentação** | Mesmo prompt. | O diagrama ER em Mermaid foi corrigido: atributos separados por `;` não são aceitos e passaram para uma linha cada. | README com passo a passo para rodar do zero, requisitos (RF/RNF/RN), arquitetura com as decisões e este documento. |
 
 > **Como continuar preenchendo:** para cada nova funcionalidade ou bug, adicione uma linha com o **texto exato** do
@@ -54,6 +55,7 @@ Um trecho de código gerado pela IA só foi aceito quando:
 3. *"de inicio ao GeadaAlerta, pode ir iniciando todas as operações que vou dando as permissões e conectando o que for necessario"*
 4. *"iniciei o docker, agora de continuidade"*
 5. *"voltei"* (retomada: testes da interface no navegador)
+6. *"onde realizo login?"* (login no GitHub; em seguida, criação do repositório e do Kanban)
 
 ---
 

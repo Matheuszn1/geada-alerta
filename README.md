@@ -37,7 +37,7 @@ O produtor cadastra suas propriedades e o que plantou. O GeadaAlerta busca a pre
 
 ```bash
 # 1. Clonar e instalar as dependências (raiz, backend e frontend)
-git clone <url-do-repositorio> geada-alerta
+git clone https://github.com/Matheuszn1/geada-alerta.git
 cd geada-alerta
 npm run setup
 
@@ -60,10 +60,14 @@ npm run dev
 
 No painel, clique em **"↻ Atualizar previsões"** para buscar a previsão real das propriedades de exemplo.
 
+Para ver alertas mesmo fora da época de geada, rode `npm run db:demo`: ele simula uma frente fria na próxima
+madrugada (funciona sem internet). O roteiro da apresentação está em [docs/roteiro-apresentacao.md](docs/roteiro-apresentacao.md).
+
 ### Outros comandos
 
 | Comando | O que faz |
 |---|---|
+| `npm run db:demo` | Cenário de demonstração: frente fria com alertas Crítico, Alto e Moderado |
 | `npm test` | Testes unitários da regra de risco |
 | `npm run db:studio` | Abre o Prisma Studio para ver o banco |
 | `npm run db:down` | Para o container do banco (os dados ficam no volume) |
@@ -72,7 +76,7 @@ No painel, clique em **"↻ Atualizar previsões"** para buscar a previsão real
 
 ```
 ├── backend/
-│   ├── prisma/            # schema.prisma, migrations e seed
+│   ├── prisma/            # schema.prisma, migrations, seed e cenário de demonstração
 │   ├── src/
 │   │   ├── controllers/   # CRUD e ações (try/catch + status HTTP)
 │   │   ├── routes/        # mapeamento das rotas REST
