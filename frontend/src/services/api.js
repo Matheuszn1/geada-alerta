@@ -24,6 +24,11 @@ async function requisicao(caminho, { method = 'GET', body } = {}) {
   if (resposta.status === 204) return null
   const dados = await resposta.json().catch(() => null)
 
+  // 502/503/504 sem corpo JSON: o proxy do Vite não alcançou o backend (API desligada ou reiniciando)
+  if (!dados && resposta.status >= 502 && resposta.status <= 504) {
+    throw new ErroApi('Não foi possível conectar ao servidor. O backend está rodando?', resposta.status)
+  }
+
   if (!resposta.ok) {
     const detalhes = dados?.detalhes?.map((d) => `${d.campo}: ${d.mensagem}`).join('; ')
     throw new ErroApi(detalhes ? `${dados.erro} — ${detalhes}` : dados?.erro ?? `Erro ${resposta.status}`, resposta.status, dados?.detalhes)

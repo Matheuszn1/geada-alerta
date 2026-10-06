@@ -2,7 +2,9 @@ import 'dotenv/config';
 import { app } from './app.js';
 import { prisma } from './lib/prisma.js';
 
-const PORT = Number(process.env.PORT ?? 3333);
+// API_PORT (e não PORT): ferramentas como o Vite, previews e plataformas de hospedagem costumam
+// definir PORT para outro processo, o que faria a API disputar a porta do frontend.
+const PORT = Number(process.env.API_PORT ?? 3333);
 
 const server = app.listen(PORT, () => {
   console.log(`🌡️  GeadaAlerta API rodando em http://localhost:${PORT}/api`);
