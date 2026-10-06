@@ -14,7 +14,8 @@
     "db:seed": "npm run prisma:seed --prefix backend",
     "db:studio": "npm run prisma:studio --prefix backend",
     "dev": "concurrently -n api,web -c blue,green \"npm run dev --prefix backend\" \"npm run dev --prefix frontend\"",
-    "test": "npm test --prefix backend"
+    "test": "npm test --prefix backend",
+    "db:demo": "npm run prisma:demo --prefix backend"
   },
   "devDependencies": {
     "concurrently": "^10.0.5"
